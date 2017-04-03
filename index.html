@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- <html> -->
+<html manifest="cache.appcache">
+
+<head>
+	<title>Ortho</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /> -->
+	<link rel="stylesheet" href="assets/lib/leaflet-1.0.3/leaflet.css" />
+	<link rel="stylesheet" href="assets/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="assets/lib/leaflet-locatecontrol-0.60.0/L.Control.Locate.min.css" />
+	<script src="assets/lib/leaflet-1.0.3/leaflet.js"></script>
+	<script src="assets/lib/leaflet-locatecontrol-0.60.0/L.Control.Locate.min.js"></script>
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+
+		html,
+		body,
+		#map {
+			height: 100vh;
+			width: 100vw;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="map"></div>
+
+	<script>
+		var baseLayers = {
+			"Carto": L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+				maxZoom: 18,
+				attribution: "© <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>"
+			}),
+			"Streets": L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+				maxZoom: 18,
+				attribution: "© <a href='https://www.mapbox.com/map-feedback/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>"
+			}),
+			"Satellite": L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnJ5bWNicmlkZSIsImEiOiJXN1NuOFFjIn0.3YNvR1YOvqEdeSsJDa-JUw", {
+				maxZoom: 18,
+				attribution: "© <a href='https://www.mapbox.com/map-feedback/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>"
+			}),
+			"Hybrid": L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnJ5bWNicmlkZSIsImEiOiJXN1NuOFFjIn0.3YNvR1YOvqEdeSsJDa-JUw", {
+				maxZoom: 18,
+				attribution: "© <a href='https://www.mapbox.com/map-feedback/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>"
+			}),
+			"Outdoors": L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnJ5bWNicmlkZSIsImEiOiJXN1NuOFFjIn0.3YNvR1YOvqEdeSsJDa-JUw", {
+				maxZoom: 18,
+				attribution: "© <a href='https://www.mapbox.com/map-feedback/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>"
+			}),
+			"Charts": L.tileLayer("https://tileservice.charts.noaa.gov/tiles/50000_1/{z}/{x}/{y}.png", {
+				maxZoom: 18,
+				maxNativeZoom: 16,
+				attribution: "Charts courtesy of NOAA"
+			}),
+			"None": L.tileLayer("", {
+				maxZoom: 22
+			})
+		};
+
+		var overlays = {
+			"Ridgewood": L.imageOverlay("maps/ridgewood.jpg", [
+				[42.756772, -73.841367],
+				[42.762131, -73.818967]
+			], {
+				opacity: 1
+			})
+		};
+
+		var map = L.map("map", {
+			zoomControl: false,
+			maxZoom: 22,
+			layers: [baseLayers.Carto, overlays.Ridgewood]
+		}).fitWorld();
+		map.attributionControl.setPrefix("");
+
+		L.control.layers(baseLayers, overlays).addTo(map);
+
+		L.control.locate({
+			position: "topleft",
+			icon: "fa fa-crosshairs",
+			iconLoading: "fa fa-circle-o-notch fa-spin",
+			flyTo: false,
+			circleStyle: {
+				stroke: false,
+				interactive: false
+			},
+			markerStyle: {
+				color: "white",
+				radius: 7,
+				opacity: 0.9,
+				interactive: false
+			},
+			locateOptions: {
+				enableHighAccuracy: true
+			},
+			onLocationError: function(e) {
+				alert(e.message);
+			}
+		}).addTo(map).start();
+	</script>
+</body>
+
+</html>
