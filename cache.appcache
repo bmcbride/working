@@ -1,13 +1,15 @@
 CACHE MANIFEST
-# v1.2 - 2017-04-02
+# 2017-06-12
 NETWORK:
 *
 CACHE:
 index.html
-assets/lib/leaflet-1.0.3/leaflet.css
+assets/lib/leaflet-1.1.0/leaflet.css
 assets/lib/font-awesome-4.7.0/css/font-awesome.min.css
 assets/lib/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2
-assets/lib/leaflet-locatecontrol-0.60.0/L.Control.Locate.min.css
-assets/lib/leaflet-1.0.3/leaflet.js
-assets/lib/leaflet-locatecontrol-0.60.0/L.Control.Locate.min.js
+assets/lib/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.css
+assets/lib/leaflet-1.1.0/leaflet.js
+assets/lib/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.js
 maps/ridgewood.jpg
+maps/ThacherTrailMapNorth.jpg
+maps/ThacherTrailMap.jpg
