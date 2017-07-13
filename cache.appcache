@@ -1,12 +1,12 @@
 CACHE MANIFEST
-# 2017-06-12 v1.2
+# 2017-06-12 v1.3
 NETWORK:
 *
 CACHE:
 index.html
 assets/lib/leaflet-1.1.0/leaflet.css
 assets/lib/font-awesome-4.7.0/css/font-awesome.min.css
-assets/lib/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2
+assets/lib/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0
 assets/lib/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.css
 assets/lib/leaflet-1.1.0/leaflet.js
 assets/lib/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.js
