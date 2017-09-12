@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- <html> -->
 <html manifest="cache.appcache">
 
 <head>
@@ -67,7 +68,7 @@
 		var bounds = L.featureGroup([overlays["Thacher Park North"], overlays["Thacher Park South"], overlays["Ridgewood"]]).getBounds();
 
 		var map = L.map("map", {
-			zoomControl: false,
+			zoomControl: true,
 			maxZoom: 20,
 			layers: [overlays["Ridgewood"], overlays["Thacher Park North"], overlays["Thacher Park South"]]
 		}).fitBounds(bounds)
@@ -78,6 +79,7 @@
 			}
 		});
 		map.attributionControl.setPrefix("");
+		map.zoomControl.setPosition("bottomright");
 
 		var layersCtrl = L.control.layers(baseLayers, overlays, {
 			position: "topleft",
@@ -128,6 +130,14 @@
         'rmText': '<i class="fa fa-trash" aria-hidden="true"></i>'
     });
     cacheControl.addTo(map);
+
+		baseLayers["Carto"].on("loadend", function(e) {
+      alert("Map tiles cached!");
+    });
+
+		baseLayers["Carto"].on("tilesremoved", function(e) {
+      alert("Cached map tiles removed!");
+    });
 	</script>
 </body>
 
