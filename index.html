@@ -13,6 +13,8 @@
 	<link rel="stylesheet" href="assets/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="assets/lib/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.css" />
 	<script src="assets/lib/leaflet-1.1.0/leaflet.js"></script>
+	<script src="assets/lib/localForage-1.5.0/localforage.min.js"></script>
+	<script src="assets/lib/leaflet-offline-0.1.0-beta.6/leaflet.offline.js"></script>
 	<script src="assets/lib/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.js"></script>
 	<style>
 		body {
@@ -32,8 +34,9 @@
 
 	<script>
 		var baseLayers = {
-			"Carto": L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+			"Carto": L.tileLayer.offline("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
 				maxZoom: 18,
+				maxNativeZoom: 16,
 				attribution: "© <a href='http://openstreetmap.org'>OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>"
 			}),
 			"None": L.tileLayer("", {
@@ -77,7 +80,7 @@
 		});
 		map.attributionControl.setPrefix("");
 
-		var layersCtrl = L.control.layers(null, overlays, {
+		var layersCtrl = L.control.layers(baseLayers, overlays, {
 			position: "topleft",
 			collapsed: false
 		}).addTo(map);
@@ -99,7 +102,7 @@
 			},
 			locateOptions: {
 				enableHighAccuracy: true,
-				maxZoom: 19
+				maxZoom: 18
 			},
 			onLocationError: function(e) {
 				alert(e.message);
@@ -107,6 +110,25 @@
 		}).addTo(map);
 
 		locateCtrl.start();
+
+		var cacheControl = L.control.savetiles(baseLayers["Carto"], {
+        //'zoomlevels': [13, 16], //optional zoomlevels to save, default current zoomlevel
+				'maxZoom': 16,
+				'saveWhatYouSee': true,
+        'confirm': function(layer, succescallback) {
+            if (window.confirm("Save " + layer._tilesforSave.length)) {
+                succescallback();
+            }
+        },
+        'confirmRemoval': function(layer, successCallback) {
+            if (window.confirm("Remove all the tiles?")) {
+                successCallback();
+            }
+        },
+        'saveText': '<i class="fa fa-download" aria-hidden="true"></i>',
+        'rmText': '<i class="fa fa-trash" aria-hidden="true"></i>'
+    });
+    cacheControl.addTo(map);
 	</script>
 </body>
 

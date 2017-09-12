@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2017-06-12 v1.3
+# 2017-09-12 v1.4
 NETWORK:
 *
 CACHE:
@@ -9,6 +9,8 @@ assets/lib/font-awesome-4.7.0/css/font-awesome.min.css
 assets/lib/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0
 assets/lib/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.css
 assets/lib/leaflet-1.1.0/leaflet.js
+assets/lib/localForage-1.5.0/localforage.min.js
+assets/lib/leaflet-offline-0.1.0-beta.6/leaflet.offline.js
 assets/lib/leaflet-locatecontrol-0.62.0/L.Control.Locate.min.js
 maps/ridgewood.jpg
 maps/ThacherTrailMapNorth.jpg
