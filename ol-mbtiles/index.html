@@ -1,0 +1,148 @@
+<html>
+  <head>
+    <title>OL MBTiles</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <link href="assets/vendor/openlayers-6.1.1/ol.css" rel="stylesheet" type="text/css">
+    <style>
+      html, body {
+      height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        border: 0;
+      }
+
+      .map {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script src="assets/vendor/openlayers-6.1.1/ol.js" type="text/javascript"></script>
+    <script src="assets/vendor/sql.js/sql-wasm.js"></script>
+    <script>
+      initSqlJs({
+        locateFile: function() {
+          return "assets/vendor/sql.js/sql-wasm.wasm";
+        }
+      }).then(function(SQL){
+        loadMBTiles("14782_1.mbtiles");
+      });
+
+      // standard OSM layer
+      var osm = new ol.layer.Tile({
+          source: new ol.source.OSM(),
+          projection: "EPSG:3857"
+      });
+
+      // map
+      var map = new ol.Map({
+        target: "map",
+        layers: [osm],
+        view: new ol.View()
+      });
+
+      // geolocation
+      var locationMarker = new ol.layer.Vector({
+        zIndex: 15,
+        source: new ol.source.Vector({
+          features: [new ol.Feature()]
+        }),
+        style: new ol.style.Style({
+          image: new ol.style.Icon({
+            rotateWithView: true,
+            src: "https://openlayers.org/en/latest/examples/data/geolocation_marker.png"
+          })
+        })
+      });
+      map.addLayer(locationMarker);
+
+      var geolocation = new ol.Geolocation({
+        projection: map.getView().getProjection(),
+        trackingOptions: {
+          maximumAge: 10000,
+          enableHighAccuracy: true,
+          timeout: 600000
+        }
+      });
+      geolocation.setTracking(true);
+
+      geolocation.once("error", function(error) {
+        alert(error.message);
+      });
+
+      geolocation.on("change:position", function() {
+        const coordinates = geolocation.getPosition();
+        const heading = geolocation.getHeading();
+        locationMarker.getSource().getFeatures()[0].setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+        if (heading) {
+          var style = new ol.style.Style({
+            image: new ol.style.Icon({
+              rotation: Math.PI / 180 * heading,
+              rotateWithView: true,
+              src: "https://openlayers.org/en/latest/examples/data/geolocation_marker_heading.png"
+            })
+          });
+          locationMarker.setStyle(style);
+        } else {
+          var style = new ol.style.Style({
+            image: new ol.style.Icon({
+              rotation: 0,
+              rotateWithView: true,
+              src: "https://openlayers.org/en/latest/examples/data/geolocation_marker.png"
+            })
+          });
+          locationMarker.setStyle(style);
+        }
+      });
+
+      // mbtiles layer
+      const mbtiles = new ol.layer.Tile({
+        source: new ol.source.XYZ({
+          // transition: 0,
+          tileUrlFunction: function(tileCoord) {
+            return "";
+          }
+        }),
+        projection: "EPSG:3857"
+      });
+      map.addLayer(mbtiles);
+
+      function loadMBTiles(url) {
+        fetch(url).then(response => {
+          return response.arrayBuffer();
+        }).then(buffer => {
+          const db = new SQL.Database(new Uint8Array(buffer));
+          mbtiles.getSource().setTileLoadFunction(function(tile, src) {
+            const tileCoord = tile.getTileCoord();
+            const stmt = db.prepare("SELECT tile_data FROM tiles WHERE zoom_level = :z AND tile_column = :x AND tile_row = :y");
+            const row = stmt.getAsObject({
+              ":x": tileCoord[1],
+              ":y": (Math.pow(2, tileCoord[0]) - tileCoord[2] - 1),
+              ":z": tileCoord[0]
+            });
+
+            if ("tile_data" in row) {
+              tile.getImage().src = window.URL.createObjectURL(new Blob([row.tile_data], {
+                type: "image/png"
+              }));
+            } else {
+              tile.setState(3);
+              return;
+            }
+          })
+
+          const metadata = db.exec("SELECT value FROM metadata WHERE name IN ('attribution', 'bounds')");
+          mbtiles.getSource().setAttributions(metadata[0].values[0][0]);
+          const extent = ol.proj.transformExtent(metadata[0].values[1][0].split(","), "EPSG:4326", "EPSG:3857");
+          map.getView().fit(extent);
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+    </script>
+  </body>
+</html>
