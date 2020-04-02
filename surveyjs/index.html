@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>SurveyJS Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1ab394">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1ab394">
+  <meta name="description" content="SurveyJS experiments">
+  <meta name="author" content="Bryan McBride">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/survey-jquery"></script>
+  <script src="assets/vendor/survey-jquery/geolocation-widget.js"></script>
+  <link href="https://unpkg.com/survey-jquery/survey.min.css" type="text/css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" type="text/css" rel="stylesheet"/>
+  <!-- <link href="https://unpkg.com/survey-jquery/modern.min.css" type="text/css" rel="stylesheet"/> -->
+  <!-- <link href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/> -->
+  <!-- <link href="https://unpkg.com/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet"/> -->
+  <!-- <link rel="stylesheet" href="./index.css"> -->
+  <style>
+    .sv_body {
+      padding: 0px !important;
+    }
+    .sv_header h5{
+      margin: 5px;
+    }
+    /* @media (max-width: 700px) { */
+      .sv_main .sv_container .sv_header h3 span {
+        font-size: 1.5em !important;
+      }
+    /* } */
+      .sv_main .sv_qstn .sv_q_file .sv-file__decorator {
+        min-width: unset !important;
+      }
+    /* .geolocation-input {
+      width: 60% !important;
+    } */
+    .geolocation-button {
+      margin-left: 5px !important;
+      padding: 0px !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="surveyElement" style="display:inline-block;width:100%;"></div>
+  <div id="surveyResult"></div>
+
+  <script>
+    Survey
+      .StylesManager
+      .applyTheme("default");
+      // .applyTheme("modern");
+      // .applyTheme("bootstrap");
+    Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+
+    // The getLatLng() function accepts a geolocationbutton result and returns latitude or longitude
+    function getLatLng(params) {
+      if (!params && params.length < 1) 
+        return -1;
+      if (params[0]) {
+        var coordinates = params[0];
+        var result = (params[1] && params[1] == "latitude") ? coordinates.split(",")[0] : (params[1] && params[1] == "longitude") ? coordinates.split(",")[1] : coordinates;
+        return result;
+      } else {
+        return null;
+      }
+    }
+    // Register the function for use in SurveyJS expressions
+    Survey
+        .FunctionFactory
+        .Instance
+        .register("getLatLng", getLatLng);
+
+    var json = {
+      showQuestionNumbers: "off",
+      clearInvisibleValues: "none",
+      completedHtml: `<h3>Thank you for your submission!</h3> <h5><a href='#' onclick='location.reload(); return false;'>Go back to the form</a></h5>`,
+      questionTitleLocation: "top",
+      title: "My Test Form",
+      // description: "description",
+      questions/*elements*/: [{
+        title: "Location coordinates:",
+        name: "coordinates",
+        type: "geolocationbutton",
+        placeHolder: "",
+        buttonText: "Get Location"
+      }, {
+        title: "Latitude:",
+        name: "latitude",
+        type: "expression",
+        expression: "getLatLng({coordinates}, 'latitude')",
+        // visibleIf: "{coordinates}notempty",
+        visible: false
+      }, {
+        title: "Longitude:",
+        name: "longitude",
+        type: "expression",
+        expression: "getLatLng({coordinates}, 'longitude')",
+        // visibleIf: "{coordinates}notempty",
+        visible: false,
+        startWithNewLine: false
+      }, {
+        title: "Please enter your name:",
+        name: "name",
+        type: "text",
+        // placeHolder: "Jon Snow",
+        isRequired: true
+      }, {
+        title: "Your date:",
+        name: "date",
+        type: "text",
+        inputType: "date",
+        isRequired: true,
+        startWithNewLine: false
+      }, {
+        title: "Your favorite color:",
+        name: "color",
+        type: "text",
+        inputType: "color"
+      }, {
+        title: "Please answer the question:",
+        name: "bool",
+        type: "boolean",
+        label: "Are you 21 or older?",
+        isRequired: false
+        }, {
+        title: "Operating Systems",
+        name: "opSystem",
+        type: "checkbox",
+        hasOther: true,
+        isRequired: true,
+        choices: ["Windows", "Linux", "Macintosh OSX"]
+      }, {
+        title: "What car are you driving?:",
+        name: "car",
+        type: "dropdown",
+        isRequired: true,
+        colCount: 0,
+        choices: [
+          "None",
+          "Ford",
+          "Vauxhall",
+          "Volkswagen",
+          "Nissan",
+          "Audi",
+          "Mercedes-Benz",
+          "BMW",
+          "Peugeot",
+          "Toyota",
+          "Citroen"
+        ]
+      }, {
+        title: "Your e-mail:",
+        name: "email",
+        type: "text",
+        inputType: "email",
+        placeHolder: "jon.snow@nightwatch.org",
+        isRequired: false,
+        validators: [{
+          type: "email"
+        }]
+      }, {
+        title: "Attach photo",
+        name: "image",
+        type: "file",
+        storeDataAsText: true,
+        allowMultiple: true,
+        showPreview: true,
+        imageWidth: 150,
+        maxSize: 0,
+        acceptedTypes: "image/*",
+        needConfirmRemoveFile: true
+      }, {
+        title: "Additional comments?",
+        type: "comment",
+        name: "suggestions"
+      }]
+    };
+
+    window.survey = new Survey.Model(json);
+
+    //survey
+      /*.onComplete
+      .add(function (result) {
+        document
+          .querySelector('#surveyResult')
+          .textContent = "Result JSON:\n" + JSON.stringify(result.data, null, 3);
+      });*/
+      // .add(function (sender, options) {
+      //   options.showDataSaving("Submitting data to server...");
+      //   var xhr = new XMLHttpRequest();
+      //   xhr.open("POST", "YourServiceForStoringSurveyResultsAsJSON_URL");
+      //   xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+      //   xhr.send(JSON.stringify(sender.data));
+      // });
+
+    $("#surveyElement").Survey({
+      model: survey,
+      onComplete: sendDataToServer,
+      onAfterRenderSurvey: setValues/*,
+      onAfterRenderQuestion: test*/
+    });
+
+    function sendDataToServer(survey, options) {
+      //send Ajax request to your web server.
+      options.showDataSaving("Submitting data to server...");
+      // alert("The results are:" + JSON.stringify(survey.data));
+      console.log(survey.data);
+    }
+
+    function setValues(survey, options) {
+      survey.getQuestionByName("date").value = new Date().toLocaleDateString('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      if (navigator.geolocation) {
+        $(".fa-spinner").show();
+        navigator.geolocation.getCurrentPosition(function(position) {
+          survey.getQuestionByName("coordinates").value = position.coords.latitude.toFixed(6) + "," + position.coords.longitude.toFixed(6);
+          $(".fa-spinner").hide();
+        }, function(error) {
+          alert(error.message);
+          $(".fa-spinner").hide();
+        }, {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        });
+      } else {
+        // survey.getQuestionByName("coordinates").value = "Geolocation not supported by this browser.";
+      }
+    }
+
+    function test(survey, options) {
+      if (options.question.name == "image") {
+        var input = options.htmlElement.querySelector("input");
+        // input.setAttribute("maxlength", "3");
+        input.setAttribute("capture", true);
+      }
+    }
+  </script>
+
+</body>
+
+</html>
