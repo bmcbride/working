@@ -1,0 +1,22 @@
+html, body, #map {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+.fab-controls {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 999;
+}
+.fab-icon {
+  height: 55px;
+  width: 25px;
+  pointer-events: none;
+}
+.leaflet-control-locate {
+  display: none;
+}
+.leaflet-container {
+  background-color:rgba(255,0,0,0.0);
+}

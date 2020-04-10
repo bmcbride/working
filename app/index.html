@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- <meta name="theme-color" content="#2196f3"> -->
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="An offline capable map viewer with GPS integration">
+    <meta name="author" content="Bryan McBride">
+    <title>GPS Map</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+    <link rel="stylesheet" href="assets/vendor/leaflet-1.6.0/leaflet.css">
+    <link rel="stylesheet" href="assets/vendor/leaflet-locatecontrol-0.70.0/L.Control.Locate.min.css">
+    <link rel="stylesheet" href="assets/vendor/mui-0.10.1/css/mui.min.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+  </head>
+  <body>
+    <main id="map"></main>
+    <div class="fab-controls">
+      <button id="gps-btn" class="mui-btn mui-btn--fab" onclick="zoomToLocation();">
+        <object id="gps-icon" class="fab-icon" data="assets/img/gps_not_fixed-black-18dp.svg"></object>
+      </button><br>
+      <button id="extent-btn" class="mui-btn mui-btn--fab" onclick="zoomToLayer();">
+        <object class="fab-icon" data="assets/img/zoom_out_map-black-18dp.svg"></object>
+      </button>
+    </div>
+    <script src="assets/vendor/leaflet-1.6.0/leaflet.js"></script>
+    <script src="assets/vendor/leaflet-locatecontrol-0.70.0/L.Control.Locate.min.js"></script>
+    <script src="assets/vendor/Leaflet.TileLayer.Base64/Leaflet.TileLayer.Base64.js"></script>
+    <script src="assets/vendor/mui-0.10.1/js/mui.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+          navigator.serviceWorker.register("workbox-sw.js");
+        });
+      }
+    </script>
+    <noscript>This website requires JavaScript!</noscript>
+  </body>
+</html>
