@@ -6,8 +6,8 @@ workbox.setConfig({
 });
 
 workbox.precaching.precacheAndRoute([
-  {url: 'index.html', revision: '04.15.2020.1'},
-  {url: './', revision: '04.15.2020.1'},
+  {url: 'index.html', revision: '04.15.2020.2'},
+  {url: './', revision: '04.15.2020.2'},
   {url: 'manifest.json', revision: '04.09.2020.1'},
   {url: 'assets/img/apple-touch-icon.png', revision: '04.09.2020.1'},
   {url: 'assets/img/favicon-32x32.png', revision: '04.09.2020.1'},
@@ -17,7 +17,7 @@ workbox.precaching.precacheAndRoute([
   {url: 'assets/img/gps_not_fixed-black-18dp.svg', revision: '04.09.2020.1'},
   {url: 'assets/img/gps_fixed-black-18dp.svg', revision: '04.09.2020.1'},
   {url: 'assets/img/more_horiz-black-18dp.svg', revision: '04.09.2020.1'},
-  {url: 'assets/img/map-white-18dp.svg', revision: '04.09.2020.1'},
+  {url: 'assets/img/settings-white-18dp.svg', revision: '04.15.2020.1'},
   {url: 'assets/img/share-white-18dp.svg', revision: '04.09.2020.1'},
   {url: 'assets/img/zoom_out_map-white-18dp.svg', revision: '04.09.2020.1'},
   {url: 'assets/img/update-white-18dp.svg', revision: '04.09.2020.1'},
