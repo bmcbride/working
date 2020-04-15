@@ -34,15 +34,8 @@ workbox.precaching.precacheAndRoute([
 ]);
 
 workbox.routing.registerRoute(
-  // 'https://httpbin.org/image/(.*)',
   new RegExp('/maps/'),
   new workbox.strategies.CacheFirst({
     cacheName: 'cached-maps'
-    // plugins: [
-    //   new workbox.expiration.ExpirationPlugin({
-    //     // maxEntries: 60,
-    //     // maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-    //   })
-    // ]
   })
 );

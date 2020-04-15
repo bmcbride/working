@@ -3,6 +3,12 @@ html, body, #map {
   width: 100%;
   margin: 0;
 }
+.fab-alert {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 999;
+}
 .fab-controls {
   position: fixed;
   bottom: 1rem;
@@ -17,6 +23,24 @@ html, body, #map {
 .leaflet-control-locate {
   display: none;
 }
+.leaflet-left .leaflet-control {
+  margin-left: 5px;
+}
+.leaflet-credits-control {
+  margin-bottom: 10px !important;
+}
 .leaflet-container {
   background-color:rgba(255,0,0,0.0);
+}
+.modal-div {
+  width: 90%;
+  max-width: 400px;
+  height: 300px;
+  margin: 100px auto;
+  background-color: #fff;
+}
+.mui-tabs__pane {
+  margin-top: 5px;
+  height: 240px;
+  overflow: auto;
 }

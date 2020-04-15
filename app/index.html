@@ -16,11 +16,17 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
     <link rel="stylesheet" href="assets/vendor/leaflet-1.6.0/leaflet.css">
     <link rel="stylesheet" href="assets/vendor/leaflet-locatecontrol-0.70.0/L.Control.Locate.min.css">
+    <link rel="stylesheet" href="assets/vendor/L.Control.Credits-1.2/leaflet-control-credits.css">
     <link rel="stylesheet" href="assets/vendor/mui-0.10.1/css/mui.min.css">
     <link rel="stylesheet" href="assets/css/app.css">
   </head>
   <body>
     <main id="map"></main>
+    <div class="fab-alert mui--hide">
+      <button id="alert-btn" class="mui-btn mui-btn--fab mui-btn--primary" onclick="checkUpdates(true);">
+        <object class="fab-icon" data="assets/img/notification_important-white-18dp.svg"></object>
+      </button>
+    </div>
     <div class="fab-controls">
       <button id="gps-btn" class="mui-btn mui-btn--fab" onclick="zoomToLocation();">
         <object id="gps-icon" class="fab-icon" data="assets/img/gps_not_fixed-black-18dp.svg"></object>
@@ -32,6 +38,7 @@
     <script src="assets/vendor/leaflet-1.6.0/leaflet.js"></script>
     <script src="assets/vendor/leaflet-locatecontrol-0.70.0/L.Control.Locate.min.js"></script>
     <script src="assets/vendor/Leaflet.TileLayer.Base64/Leaflet.TileLayer.Base64.js"></script>
+    <script src="assets/vendor/L.Control.Credits-1.2/leaflet-control-credits.js"></script>
     <script src="assets/vendor/mui-0.10.1/js/mui.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script>
