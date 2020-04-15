@@ -16,30 +16,93 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
     <link rel="stylesheet" href="assets/vendor/leaflet-1.6.0/leaflet.css">
     <link rel="stylesheet" href="assets/vendor/leaflet-locatecontrol-0.70.0/L.Control.Locate.min.css">
-    <link rel="stylesheet" href="assets/vendor/L.Control.Credits-1.2/leaflet-control-credits.css">
-    <link rel="stylesheet" href="assets/vendor/mui-0.10.1/css/mui.min.css">
+    <link rel="stylesheet" href="assets/vendor/materialize-1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="assets/css/app.css">
   </head>
   <body>
     <main id="map"></main>
-    <div class="fab-alert mui--hide">
-      <button id="alert-btn" class="mui-btn mui-btn--fab mui-btn--primary" onclick="checkUpdates(true);">
-        <object class="fab-icon" data="assets/img/notification_important-white-18dp.svg"></object>
-      </button>
+    <!-- <a id="alert-btn" class="btn-floating btn-large waves-effect waves-light blue" onclick="checkUpdates(true);">
+      <object class="fab-icon" data="assets/img/notification_important-white-18dp.svg"></object>
+    </a> -->
+    <a id="gps-btn" class="btn-floating btn-large waves-effect waves-light grey lighten-5" onclick="zoomToLocation();">
+      <object id="gps-icon" class="fab-icon" data="assets/img/gps_not_fixed-black-18dp.svg"></object>
+    </a>
+    <div id="fab-btn" class="fixed-action-btn">
+      <a class="btn-floating btn-large waves-effect waves-light grey lighten-5">
+        <object class="fab-icon" data="assets/img/more_horiz-black-18dp.svg"></object>
+      </a>
+      <ul>
+        <!-- <li>
+          <a class="btn-floating waves-effect waves-light yellow darken-1 modal-trigger" href="#about-modal">
+            <object class="fab-icon-small" data="assets/img/help-white-18dp.svg"></object>
+          </a>
+        </li> -->
+        <li>
+          <a class="btn-floating waves-effect waves-light red modal-trigger" href="#maps-modal">
+            <object class="fab-icon-small" data="assets/img/map-white-18dp.svg"></object>
+          </a>
+        </li>
+        <li>
+          <a class="btn-floating waves-effect waves-light green" onclick="shareLink();">
+            <object class="fab-icon-small" data="assets/img/share-white-18dp.svg"></object>
+          </a>
+        </li>
+        <li>
+          <a class="btn-floating waves-effect waves-light blue" onclick="zoomToLayer();">
+            <object class="fab-icon-small" data="assets/img/zoom_out_map-white-18dp.svg"></object>
+          </a>
+        </li>
+      </ul>
     </div>
-    <div class="fab-controls">
-      <button id="gps-btn" class="mui-btn mui-btn--fab" onclick="zoomToLocation();">
-        <object id="gps-icon" class="fab-icon" data="assets/img/gps_not_fixed-black-18dp.svg"></object>
-      </button><br>
-      <button id="extent-btn" class="mui-btn mui-btn--fab" onclick="zoomToLayer();">
-        <object class="fab-icon" data="assets/img/zoom_out_map-black-18dp.svg"></object>
-      </button>
+    <!-- Maps Modal -->
+    <!-- <div id="about-modal" class="modal modal-fixed-footer"> -->
+      <div id="maps-modal" class="modal bottom-sheet">
+      <div class="modal-content" style="padding: 5px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Saved</th>
+              <th>Size</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="#peebles_island">Peebles Island</a></td>
+              <td>04/01/2020</td>
+              <td>1 MB</td>
+              <td>
+                <a class="btn-floating waves-effect waves-light blue"><object class="fab-icon-small" data="assets/img/update-white-18dp.svg"></object></a>
+                <a class="btn-floating waves-effect waves-light red"><object class="fab-icon-small" data="assets/img/delete-white-18dp.svg"></object></a>
+              </td>
+            </tr>
+            <tr>
+              <td><a href="#shaker_ridge">Shaker Ridge</a></td>
+              <td>04/10/2020</td>
+              <td>250 KB</td>
+              <td>
+                <a class="btn-floating waves-effect waves-light blue"><object class="fab-icon-small" data="assets/img/update-white-18dp.svg"></object></a>
+                <a class="btn-floating waves-effect waves-light red"><object class="fab-icon-small" data="assets/img/delete-white-18dp.svg"></object></a>
+              </td>
+            </tr>
+            <tr>
+              <td>Lake Champlain</td>
+              <td>03/20/2020</td>
+              <td>15 MB</td>
+              <td>
+                <a class="btn-floating waves-effect waves-light blue"><object class="fab-icon-small" data="assets/img/update-white-18dp.svg"></object></a>
+                <a class="btn-floating waves-effect waves-light red"><object class="fab-icon-small" data="assets/img/delete-white-18dp.svg"></object></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <script src="assets/vendor/leaflet-1.6.0/leaflet.js"></script>
     <script src="assets/vendor/leaflet-locatecontrol-0.70.0/L.Control.Locate.min.js"></script>
     <script src="assets/vendor/Leaflet.TileLayer.Base64/Leaflet.TileLayer.Base64.js"></script>
-    <script src="assets/vendor/L.Control.Credits-1.2/leaflet-control-credits.js"></script>
-    <script src="assets/vendor/mui-0.10.1/js/mui.min.js"></script>
+    <script src="assets/vendor/materialize-1.0.0/js/materialize.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script>
       if ("serviceWorker" in navigator) {
