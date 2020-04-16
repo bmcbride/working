@@ -133,6 +133,8 @@ function loadMap(url) {
     tms: true,
     updateWhenIdle: false
   }).once("loaded", function(e) {
+    const id = window.location.hash.replace("#", "");
+    document.getElementById("title").innerHTML = formatName(id);
     zoomToLayer();
     setMapBounds();
     listMaps();
@@ -146,6 +148,14 @@ function formatBytes(bytes, decimals = 2) {
   const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function formatName(str) {
+  str = str.split("_");
+  for (var i = 0, x = str.length; i < x; i++) {
+    str[i] = str[i][0].toUpperCase() + str[i].substr(1);
+  }
+  return str.join(" ");
 }
 
 /*
@@ -199,7 +209,7 @@ function listMaps() {
         table += `
           <tr>
             <td>
-              <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('maps-modal')).close()">${id.toUpperCase().replace("_", " ")}</a>
+              <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('maps-modal')).close()">${formatName(id)}</a>
             </td>
             <td>${date.toLocaleDateString()}</td>
             <td>${formatBytes(size, 1)}</td>
