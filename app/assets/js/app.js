@@ -133,11 +133,12 @@ function loadMap(url) {
     zoomToLayer();
     setMapBounds();
     if (navigator.onLine) {
-      checkUpdates(false);
+      // checkUpdates(false);
     }
   }).addTo(map);
 }
 
+/*
 function checkUpdates(prompt) {
   const url = layers.overlay._url;
   caches.open("cached-maps").then(cache => {
@@ -163,3 +164,4 @@ function checkUpdates(prompt) {
     })
   })
 }
+*/

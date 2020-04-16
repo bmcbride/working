@@ -34,8 +34,8 @@ workbox.precaching.precacheAndRoute([
   {url: 'assets/vendor/Leaflet.TileLayer.Base64/Leaflet.TileLayer.Base64.js', revision: '04.09.2020.1'},
   {url: 'assets/vendor/materialize-1.0.0/css/materialize.min.css', revision: '04.09.2020.1'},
   {url: 'assets/vendor/materialize-1.0.0/js/materialize.min.js', revision: '04.09.2020.1'},
-  {url: 'assets/css/app.css', revision: '04.09.2020.1'},
-  {url: 'assets/js/app.js', revision: '04.09.2020.1'}
+  {url: 'assets/css/app.css', revision: '04.15.2020.1'},
+  {url: 'assets/js/app.js', revision: '04.15.2020.1'}
 ]);
 
 workbox.routing.registerRoute(
