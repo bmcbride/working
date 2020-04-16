@@ -106,8 +106,8 @@ function zoomToLocation() {
 function shareLink() {
   if (navigator.share) {
     navigator.share({
-      title: "OTM",
-      text: "On The Map",
+      title: "On The Map",
+      text: document.getElementById("title").innerHTML,
       url: window.location.href
     }).then(() => {
       console.log('Thanks for sharing!');
