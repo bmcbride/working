@@ -6,8 +6,8 @@ workbox.setConfig({
 });
 
 workbox.precaching.precacheAndRoute([
-  {url: 'index.html', revision: '04.15.2020.2'},
-  {url: './', revision: '04.15.2020.2'},
+  {url: 'index.html', revision: '04.15.2020.3'},
+  {url: './', revision: '04.15.2020.3'},
   {url: 'manifest.json', revision: '04.09.2020.1'},
   {url: 'assets/img/apple-touch-icon.png', revision: '04.09.2020.1'},
   {url: 'assets/img/favicon-32x32.png', revision: '04.09.2020.1'},
@@ -20,8 +20,8 @@ workbox.precaching.precacheAndRoute([
   {url: 'assets/img/settings-white-18dp.svg', revision: '04.15.2020.1'},
   {url: 'assets/img/share-white-18dp.svg', revision: '04.09.2020.1'},
   {url: 'assets/img/zoom_out_map-white-18dp.svg', revision: '04.09.2020.1'},
-  {url: 'assets/img/update-white-18dp.svg', revision: '04.09.2020.1'},
-  {url: 'assets/img/delete-white-18dp.svg', revision: '04.09.2020.1'},
+  {url: 'assets/img/update-white-18dp.svg', revision: '04.15.2020.1'},
+  {url: 'assets/img/delete-white-18dp.svg', revision: '04.15.2020.1'},
   {url: 'assets/vendor/leaflet-1.6.0/images/layers.png', revision: '04.09.2020.1'},
   {url: 'assets/vendor/leaflet-1.6.0/images/layers-2x.png', revision: '04.09.2020.1'},
   {url: 'assets/vendor/leaflet-1.6.0/images/marker-icon.png', revision: '04.09.2020.1'},
@@ -34,8 +34,8 @@ workbox.precaching.precacheAndRoute([
   {url: 'assets/vendor/Leaflet.TileLayer.Base64/Leaflet.TileLayer.Base64.js', revision: '04.09.2020.1'},
   {url: 'assets/vendor/materialize-1.0.0/css/materialize.min.css', revision: '04.09.2020.1'},
   {url: 'assets/vendor/materialize-1.0.0/js/materialize.min.js', revision: '04.09.2020.1'},
-  {url: 'assets/css/app.css', revision: '04.15.2020.1'},
-  {url: 'assets/js/app.js', revision: '04.15.2020.1'}
+  {url: 'assets/css/app.css', revision: '04.15.2020.3'},
+  {url: 'assets/js/app.js', revision: '04.15.2020.3'}
 ]);
 
 workbox.routing.registerRoute(

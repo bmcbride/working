@@ -37,8 +37,11 @@ const controls = {
     markerStyle: {
       interactive: true
     },
+    metric: false,
     strings: {
-      feetUnit: true
+      popup: function(options) {
+        return `You are within ${options.distance} ${options.unit} from ${controls.locateCtrl._circle.getLatLng().lat.toFixed(6)},${controls.locateCtrl._circle.getLatLng().lng.toFixed(6)}`;
+      }
     },
     locateOptions: {
       enableHighAccuracy: true,
@@ -132,10 +135,17 @@ function loadMap(url) {
   }).once("loaded", function(e) {
     zoomToLayer();
     setMapBounds();
-    if (navigator.onLine) {
-      // checkUpdates(false);
-    }
+    listMaps();
   }).addTo(map);
+}
+
+function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 /*
@@ -165,3 +175,72 @@ function checkUpdates(prompt) {
   })
 }
 */
+
+function listMaps() {
+  let table = `<table><thead>
+    <tr>
+      <th>Map</th>
+      <th>Date</th>
+      <th>Size</th>
+      <th>Update</th>
+    </tr>
+  </thead>
+  <tbody>`;
+  caches.open("cached-maps").then(cache => {
+    cache.matchAll().then(response => {
+      response.forEach(element => {
+        const date = new Date(element.headers.get("Date"));
+        const size = element.headers.get("Content-Length");
+        const url = element.url;
+        const id = url.substring(
+          url.lastIndexOf("maps/") + 5, 
+          url.lastIndexOf(".json")
+        );
+        table += `
+          <tr>
+            <td>
+              <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('maps-modal')).close()">${id.toUpperCase().replace("_", " ")}</a>
+            </td>
+            <td>${date.toLocaleDateString()}</td>
+            <td>${formatBytes(size, 1)}</td>
+            <td>
+              <a class="btn-floating waves-effect waves-light blue" onclick="updateMap('${url}');">
+                <object class="fab-icon-small" data="assets/img/update-white-18dp.svg"></object>
+              </a>
+              <!--<a class="btn-floating waves-effect waves-light red" onclick="deleteMap();">
+                <object class="fab-icon-small" data="assets/img/delete-white-18dp.svg"></object>
+              </a>-->
+            </td>
+          </tr>
+        `;
+      });
+      table += `</tbody></table>`;
+      return table;
+    }).then(table => {
+      document.getElementById("map-list-container").innerHTML = table;
+    });
+  });
+}
+
+function updateMap(url) {
+  if (navigator.onLine) {
+    caches.open("cached-maps").then(cache => {
+      cache.match(url).then(response => {
+        if (response) {
+          const cfm = confirm("Update this map?");
+          if (cfm) {
+            cache.delete(url).then(function(response) {
+              cache.add(url).then(function() {
+                loadMap(url);
+                listMaps();
+              });
+              M.toast({html: "Map successfully updated and saved!"});
+            });
+          }
+        }
+      })
+    })
+  } else {
+    M.toast({html: "Cannot update map while offline!"});
+  }
+}

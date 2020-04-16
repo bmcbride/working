@@ -3,18 +3,15 @@ html, body, #map {
   width: 100%;
   margin: 0;
 }
+#map-list-container {
+  padding: 5px;
+}
 #alert-btn {
   position: fixed;
   top: 15px;
   right: 15px;
   z-index: 999;
 }
-/* .fab-controls {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  z-index: 999;
-} */
 .fab-icon {
   height: 56px;
   width: 28px;
@@ -42,24 +39,15 @@ html, body, #map {
 .leaflet-control-locate {
   display: none;
 }
-.leaflet-left .leaflet-control {
-  margin-left: 5px;
+.leaflet-popup-content-wrapper {
+  border-radius: 4px;
 }
-.leaflet-credits-control {
-  margin-bottom: 10px !important;
+.leaflet-popup-content {
+  margin: 10px;
+}
+.leaflet-popup-close-button {
+  display: none;
 }
 .leaflet-container {
   background-color:rgba(255,0,0,0.0);
-}
-.modal-div {
-  width: 90%;
-  max-width: 400px;
-  height: 300px;
-  margin: 100px auto;
-  background-color: #fff;
-}
-.mui-tabs__pane {
-  margin-top: 5px;
-  height: 240px;
-  overflow: auto;
 }
