@@ -117,7 +117,7 @@ function zoomToLocation() {
   if (loc && bounds.contains(loc)) {
     map.setView(loc); 
   } else {
-    alert("Your location is not on the map!");
+    M.toast({html: "Your current location is not on the map!", displayLength: 2000});
   }
 }
 
