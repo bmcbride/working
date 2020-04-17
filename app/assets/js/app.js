@@ -58,6 +58,8 @@ const controls = {
   }).addTo(map)
 };
 
+let tabs = null;
+
 window.addEventListener("hashchange", loadURLparams);
 
 map.once("locationfound", function(e) {
@@ -67,6 +69,7 @@ map.once("locationfound", function(e) {
 
 map.on("load", function(e) {
   controls.locateCtrl.start();
+  document.querySelector(".leaflet-control-scale").classList.add("scale-transition");
   loadURLparams();
 });
 
@@ -80,7 +83,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
 document.addEventListener("DOMContentLoaded", function() {
   const elems = document.querySelectorAll(".modal");
-  const instances = M.Modal.init(elems, {});
+  const instances = M.Modal.init(elems, {
+    onOpenEnd: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+      if (modal.id == "about-modal" && !tabs) {
+        tabs = M.Tabs.init(document.querySelectorAll(".tabs"), {swipeable: true});
+      }
+    }
+  });
+});
+
+document.getElementById("fab-btn").addEventListener("click", function() {
+  const scale = document.querySelector(".leaflet-control-scale");
+  if (this.classList.contains("active")) {
+    scale.classList.remove("scale-out")
+  } else {
+    scale.classList.add("scale-out");
+  }
 });
 
 map.fitWorld();
@@ -110,13 +128,13 @@ function shareLink() {
       text: document.getElementById("title").innerHTML,
       url: window.location.href
     }).then(() => {
-      console.log('Thanks for sharing!');
+      console.log("Thanks for sharing!");
     })
     .catch(err => {
       console.log(`Couldn't share because of`, err.message);
     });
   } else {
-    console.log('web share not supported');
+    console.log("web share not supported");
   }
 }
 
@@ -124,8 +142,22 @@ function loadURLparams() {
   if (window.location.hash) {
     const id = window.location.hash.replace("#", "");
     const url = window.location.origin + window.location.pathname + "maps/" + id + ".json";
-    loadMap(url);
+    checkCache(url);
   }
+}
+
+function checkCache(url) {
+  caches.open("cached-maps").then(cache => {
+    cache.match(url).then(function(match) {
+      if (match) {
+        loadMap(url);
+      } else {
+        cache.add(url).then(function() { 
+          loadMap(url);
+        });
+      }
+    });
+  });
 }
 
 function loadMap(url) {
@@ -133,10 +165,9 @@ function loadMap(url) {
     tms: true,
     updateWhenIdle: false
   }).once("loaded", function(e) {
-    const id = window.location.hash.replace("#", "");
-    document.getElementById("title").innerHTML = formatName(id);
     zoomToLayer();
     setMapBounds();
+    setTitle();
     listMaps();
   }).addTo(map);
 }
@@ -156,6 +187,17 @@ function formatName(str) {
     str[i] = str[i][0].toUpperCase() + str[i].substr(1);
   }
   return str.join(" ");
+}
+
+function setTitle() {
+  let name = window.location.hash.replace("#", "");
+  if (name.includes("/")) {
+    name = name.substring(
+      name.lastIndexOf("/") + 1, 
+      name.length
+    );
+  }
+  document.getElementById("title").innerHTML = formatName(name);
 }
 
 /*
@@ -187,7 +229,7 @@ function checkUpdates(prompt) {
 */
 
 function listMaps() {
-  let table = `<table><thead>
+  let table = `<table class="centered"><thead>
     <tr>
       <th>Map</th>
       <th>Date</th>
@@ -206,17 +248,22 @@ function listMaps() {
           url.lastIndexOf("maps/") + 5, 
           url.lastIndexOf(".json")
         );
+        const name = url.substring(
+          url.lastIndexOf("/") + 1, 
+          url.lastIndexOf(".json")
+        );
         table += `
           <tr>
             <td>
-              <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('maps-modal')).close()">${formatName(id)}</a>
+              <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('maps-modal')).close()">${formatName(name)}</a>
             </td>
             <td>${date.toLocaleDateString()}</td>
             <td>${formatBytes(size, 1)}</td>
             <td>
-              <a class="btn-floating waves-effect waves-light blue" onclick="updateMap('${url}');">
+              <a class="btn-floating waves-effect waves-light grey darken-3" onclick="updateMap('${url}');">
                 <object class="fab-icon-small" data="assets/img/update-white-18dp.svg"></object>
               </a>
+              <!--<a class="btn-small waves-effect waves-light blue" onclick="updateMap('${url}');">Update</a>-->
               <!--<a class="btn-floating waves-effect waves-light red" onclick="deleteMap();">
                 <object class="fab-icon-small" data="assets/img/delete-white-18dp.svg"></object>
               </a>-->

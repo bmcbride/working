@@ -21,9 +21,6 @@
   </head>
   <body>
     <main id="map"></main>
-    <!-- <a id="alert-btn" class="btn-floating btn-large waves-effect waves-light blue" onclick="checkUpdates(true);">
-      <object class="fab-icon" data="assets/img/notification_important-white-18dp.svg"></object>
-    </a> -->
     <a id="gps-btn" class="btn-floating btn-large waves-effect waves-light grey lighten-5" onclick="zoomToLocation();">
       <object id="gps-icon" class="fab-icon" data="assets/img/gps_not_fixed-black-18dp.svg"></object>
     </a>
@@ -32,31 +29,55 @@
         <object class="fab-icon" data="assets/img/more_horiz-black-18dp.svg"></object>
       </a>
       <ul>
-        <!-- <li>
-          <a class="btn-floating waves-effect waves-light yellow darken-1 modal-trigger" href="#about-modal">
-            <object class="fab-icon-small" data="assets/img/help-white-18dp.svg"></object>
-          </a>
-        </li> -->
         <li>
-          <a class="btn-floating waves-effect waves-light red modal-trigger" href="#maps-modal">
-            <object class="fab-icon-small" data="assets/img/settings-white-18dp.svg"></object>
+          <a class="btn-floating waves-effect waves-light grey darken-3 modal-trigger" href="#about-modal">
+            <object class="fab-icon-small" data="assets/img/help-white-18dp.svg"></object>
           </a>
         </li>
         <li>
-          <a class="btn-floating waves-effect waves-light green" onclick="shareLink();">
+          <a class="btn-floating waves-effect waves-light grey darken-3 modal-trigger" href="#maps-modal">
+            <object class="fab-icon-small" data="assets/img/map-white-18dp.svg"></object>
+          </a>
+        </li>
+        <li>
+          <a class="btn-floating waves-effect waves-light grey darken-3" onclick="shareLink();">
             <object class="fab-icon-small" data="assets/img/share-white-18dp.svg"></object>
           </a>
         </li>
         <li>
-          <a class="btn-floating waves-effect waves-light blue" onclick="zoomToLayer();">
+          <a class="btn-floating waves-effect waves-light grey darken-3" onclick="zoomToLayer();">
             <object class="fab-icon-small" data="assets/img/zoom_out_map-white-18dp.svg"></object>
           </a>
         </li>
       </ul>
     </div>
+    <!-- About Modal -->
+    <div id="about-modal" class="modal modal-fixed-footer">
+      <!-- <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div> -->
+      <ul class="tabs tabs-fixed-width tab-demo z-depth-1">
+        <li class="tab"><a class="active" href="#about">About</a></li>
+        <li class="tab"><a href="#terms">Terms</a></li>
+      </ul>
+      <div class="modal-content">
+        <div id="about" class="col s6">
+          About info here...
+        </div>
+        <div id="terms" class="col s6">
+          TOS here...
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#" onclick="return false" class="modal-close waves-effect btn-flat">Close</a>
+      </div>
+    </div>
     <!-- Maps Modal -->
     <div id="maps-modal" class="modal bottom-sheet">
-      <div class="modal-content" id="map-list-container"></div>
+      <div class="modal-content" id="map-list-container">
+        <h4>No saved maps...</h4>
+      </div>
     </div>
     <script src="assets/vendor/leaflet-1.6.0/leaflet.js"></script>
     <script src="assets/vendor/leaflet-locatecontrol-0.70.0/L.Control.Locate.min.js"></script>
