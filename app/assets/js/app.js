@@ -112,7 +112,7 @@ function setMapBounds() {
 }
 
 function zoomToLocation() {
-  const loc = controls.locateCtrl._circle.getLatLng();
+  const loc = controls.locateCtrl._circle ? controls.locateCtrl._circle.getLatLng() : null;
   const bounds = layers.overlay._bounds;
   if (loc && bounds.contains(loc)) {
     map.setView(loc); 
