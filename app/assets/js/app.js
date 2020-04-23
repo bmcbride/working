@@ -133,8 +133,6 @@ function shareLink() {
     .catch(err => {
       console.log(`Couldn't share because of`, err.message);
     });
-  } else {
-    console.log("web share not supported");
   }
 }
 
@@ -150,7 +148,7 @@ function checkCache(url) {
   caches.open("cached-maps").then(cache => {
     cache.match(url).then(function(match) {
       if (match) {
-        loadMap(url);
+        loadMap(match.url);
       } else {
         cache.add(url).then(function() { 
           loadMap(url);
@@ -200,34 +198,6 @@ function setTitle() {
   document.getElementById("title").innerHTML = formatName(name);
 }
 
-/*
-function checkUpdates(prompt) {
-  const url = layers.overlay._url;
-  caches.open("cached-maps").then(cache => {
-    cache.match(url).then(response => {
-      if (response) {
-        const cachedTimestamp = new Date(response.headers.get("date"));
-        console.log(`This map was downloaded at ${cachedTimestamp.toLocaleString()}`);
-        // if (Date.now() > cachedTimestamp.getTime() + 1000 * 60 * 60 * 6) { // 6 hours
-        if (Date.now() > cachedTimestamp.getTime() + 1000 * 60 * 20) { // 20 minutes
-          document.querySelector(".fab-alert").classList.remove("mui--hide");
-          if (prompt) {
-            const cfm = confirm(`This map was saved on ${cachedTimestamp.toDateString()} at ${cachedTimestamp.toLocaleTimeString()}. Would you like to check for updates?`);
-            if (cfm) {
-              cache.delete(url).then(function(response) {
-                loadMap(url);
-                document.querySelector(".fab-alert").classList.add("mui--hide");
-                alert("Map successfully updated and saved!");
-              });
-            }
-          }
-        }
-      }
-    })
-  })
-}
-*/
-
 function listMaps() {
   let table = `<table class="centered"><thead>
     <tr>
@@ -257,7 +227,7 @@ function listMaps() {
             <td>
               <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('maps-modal')).close()">${formatName(name)}</a>
             </td>
-            <td>${date.toLocaleDateString()}</td>
+            <td>${date.toLocaleString()}</td>
             <td>${formatBytes(size, 1)}</td>
             <td>
               <a class="btn-floating waves-effect waves-light grey darken-3" onclick="updateMap('${url}');">
