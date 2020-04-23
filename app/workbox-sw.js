@@ -38,8 +38,8 @@ workbox.precaching.precacheAndRoute([
 ]);
 
 workbox.routing.registerRoute(
-  new RegExp('/maps/')/*,
+  new RegExp('/maps/'),
   new workbox.strategies.CacheFirst({
     cacheName: 'cached-maps'
-  })*/
+  })
 );

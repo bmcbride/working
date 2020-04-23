@@ -140,7 +140,8 @@ function loadURLparams() {
   if (window.location.hash) {
     const id = window.location.hash.replace("#", "");
     const url = window.location.origin + window.location.pathname + "maps/" + id + ".json";
-    checkCache(url);
+    // checkCache(url);
+    loadMap(url);
   }
 }
 
@@ -148,7 +149,7 @@ function checkCache(url) {
   caches.open("cached-maps").then(cache => {
     cache.match(url).then(function(match) {
       if (match) {
-        loadMap(match.url);
+        loadMap(url);
       } else {
         cache.add(url).then(function() { 
           loadMap(url);
