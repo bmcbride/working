@@ -228,7 +228,7 @@ function listMaps() {
             <td>
               <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('maps-modal')).close()">${formatName(name)}</a>
             </td>
-            <td>${date.toLocaleString()}</td>
+            <td>${date.toLocaleDateString()}</td>
             <td>${formatBytes(size, 1)}</td>
             <td>
               <a class="btn-floating waves-effect waves-light grey darken-3" onclick="updateMap('${url}');">
@@ -245,7 +245,8 @@ function listMaps() {
       table += `</tbody></table>`;
       return table;
     }).then(table => {
-      document.getElementById("map-list-container").innerHTML = table;
+      // document.getElementById("map-list-container").innerHTML = table;
+      document.getElementById("maps").innerHTML = table;
     });
   });
 }
