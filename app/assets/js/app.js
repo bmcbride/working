@@ -226,7 +226,7 @@ function listMaps() {
         table += `
           <tr>
             <td>
-              <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('maps-modal')).close()">${formatName(name)}</a>
+              <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('about-modal')).close()">${formatName(name)}</a>
             </td>
             <td>${date.toLocaleDateString()}</td>
             <td>${formatBytes(size, 1)}</td>
