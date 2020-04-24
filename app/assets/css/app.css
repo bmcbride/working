@@ -3,8 +3,11 @@ html, body, #map {
   width: 100%;
   margin: 0;
 }
-#map-list-container {
-  padding: 5px;
+#about-modal .modal-content {
+  padding: 0px;
+}
+#about {
+  padding: 6px;
 }
 .fab-icon {
   height: 56px;
