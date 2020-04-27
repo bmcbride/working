@@ -67,6 +67,12 @@ map.once("locationfound", function(e) {
   document.getElementById("gps-icon").src = "assets/img/gps_fixed-black-18dp.svg";
 });
 
+map.on("locationfound", function(e) {
+  const accuracy = e.accuracy;
+  const coordinates = e.latlng;
+  document.getElementById("coordinates").innerHTML = `${coordinates.lat.toFixed(6)}, ${coordinates.lng.toFixed(6)}`
+});
+
 map.on("load", function(e) {
   controls.locateCtrl.start();
   document.querySelector(".leaflet-control-scale").classList.add("scale-transition");
@@ -90,6 +96,11 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const elems = document.querySelectorAll(".collapsible");
+  const instances = M.Collapsible.init(elems, {accordion: false});
 });
 
 document.getElementById("fab-btn").addEventListener("click", function() {
