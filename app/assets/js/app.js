@@ -240,11 +240,11 @@ function listMaps() {
             <td>${formatBytes(size, 1)}</td>
             <td>
               <a class="btn-floating waves-effect waves-light grey darken-3" onclick="updateMap('${url}');">
-                <object class="fab-icon-small" data="assets/img/update-white-18dp.svg"></object>
+                <img class="fab-icon-small" src="assets/img/update-white-18dp.svg">
               </a>
               <!--<a class="btn-small waves-effect waves-light blue" onclick="updateMap('${url}');">Update</a>-->
               <!--<a class="btn-floating waves-effect waves-light red" onclick="deleteMap();">
-                <object class="fab-icon-small" data="assets/img/delete-white-18dp.svg"></object>
+                <img class="fab-icon-small" src="assets/img/delete-white-18dp.svg">
               </a>-->
             </td>
           </tr>
