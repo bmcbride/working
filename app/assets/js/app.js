@@ -48,7 +48,7 @@ const controls = {
       maxZoom: 18
     },
     onLocationError: function(e) {
-      document.getElementById("gps-icon").data = "assets/img/gps_not_fixed-black-18dp.svg";
+      document.getElementById("gps-icon").src = "assets/img/gps_not_fixed-black-18dp.svg";
       alert(e.message);
     }
   }).addTo(map),
@@ -64,7 +64,7 @@ window.addEventListener("hashchange", loadURLparams);
 
 map.once("locationfound", function(e) {
   document.getElementById("gps-btn").disabled = false;
-  document.getElementById("gps-icon").data = "assets/img/gps_fixed-black-18dp.svg";
+  document.getElementById("gps-icon").src = "assets/img/gps_fixed-black-18dp.svg";
 });
 
 map.on("load", function(e) {
