@@ -128,11 +128,19 @@ function shareLink() {
       text: document.getElementById("title").innerHTML,
       url: window.location.href
     }).then(() => {
-      console.log("Thanks for sharing!");
+      //console.log("Thanks for sharing!");
     })
     .catch(err => {
       console.log(`Couldn't share because of`, err.message);
     });
+  } else {
+    const el = L.DomUtil.create("textarea", "hidden");
+    el.value = window.location.href;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    M.toast({html: "Link copied to clipboard!", displayLength: 2000});
   }
 }
 

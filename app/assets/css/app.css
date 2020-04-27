@@ -9,18 +9,6 @@ html, body, #map {
 #about {
   padding: 6px;
 }
-.fab-icon {
-  height: 56px;
-  width: 28px;
-  pointer-events: none;
-}
-.fab-icon-small {
-  height: 40px;
-  width: 20px;
-  margin-right: 10px;
-  margin-left: 10px;
-  pointer-events: none;
-}
 #gps-btn {
   position: fixed;
   bottom: 86px;
@@ -32,6 +20,18 @@ html, body, #map {
   bottom: 15px;
   right: 15px;
   z-index: 999;
+}
+.fab-icon {
+  height: 56px;
+  width: 28px;
+  pointer-events: none;
+}
+.fab-icon-small {
+  height: 40px;
+  width: 20px;
+  margin-right: 10px;
+  margin-left: 10px;
+  pointer-events: none;
 }
 .leaflet-control-locate {
   display: none;
