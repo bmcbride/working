@@ -54,7 +54,20 @@
       </ul>
       <div class="modal-content">
         <div id="about" class="col s6">
-          About info here...
+          <ul class="collapsible">
+            <li class="active">
+              <div class="collapsible-header"><!--<i class="material-icons">filter_drama</i>-->Current Location</div>
+              <div class="collapsible-body"><span id="coordinates">Unknown...</span></div>
+            </li>
+            <li>
+              <div class="collapsible-header"><!--<i class="material-icons">place</i>-->Second</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            <li>
+              <div class="collapsible-header"><!--<i class="material-icons">whatshot</i>-->Third</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+          </ul>
         </div>
         <div id="maps" class="col s6">
           Reload to see saved maps...
@@ -70,11 +83,11 @@
     <script src="assets/vendor/materialize-1.0.0/js/materialize.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function() {
-          navigator.serviceWorker.register("workbox-sw.js");
-        });
-      }
+      // if ("serviceWorker" in navigator) {
+      //   window.addEventListener("load", function() {
+      //     navigator.serviceWorker.register("workbox-sw.js");
+      //   });
+      // }
     </script>
     <noscript>This website requires JavaScript!</noscript>
   </body>
