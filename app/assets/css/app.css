@@ -9,6 +9,9 @@ html, body, #map {
 #about {
   padding: 6px;
 }
+#map-list-container {
+  padding: 0px;
+}
 #gps-btn {
   position: fixed;
   bottom: 86px;
@@ -32,6 +35,9 @@ html, body, #map {
   margin-right: 10px;
   margin-left: 10px;
   pointer-events: none;
+}
+.header-icon {
+  margin-right: 10px;
 }
 .leaflet-control-locate {
   display: none;

@@ -90,17 +90,17 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener("DOMContentLoaded", function() {
   const elems = document.querySelectorAll(".modal");
   const instances = M.Modal.init(elems, {
-    onOpenEnd: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
-      if (modal.id == "about-modal" && !tabs) {
-        tabs = M.Tabs.init(document.querySelectorAll(".tabs"), {swipeable: true});
-      }
-    }
+    // onOpenEnd: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+    //   if (modal.id == "about-modal" && !tabs) {
+    //     tabs = M.Tabs.init(document.querySelectorAll(".tabs"), {swipeable: true});
+    //   }
+    // }
   });
 });
 
 document.addEventListener("DOMContentLoaded", function() {
   const elems = document.querySelectorAll(".collapsible");
-  const instances = M.Collapsible.init(elems, {accordion: false});
+  const instances = M.Collapsible.init(elems, {accordion: true});
 });
 
 document.getElementById("fab-btn").addEventListener("click", function() {
@@ -219,15 +219,7 @@ function setTitle() {
 }
 
 function listMaps() {
-  let table = `<table class="centered"><thead>
-    <tr>
-      <th>Map</th>
-      <th>Date</th>
-      <th>Size</th>
-      <th>Update</th>
-    </tr>
-  </thead>
-  <tbody>`;
+  let collection = "<ul class='collection'>";
   caches.open("cached-maps").then(cache => {
     cache.matchAll().then(response => {
       response.forEach(element => {
@@ -242,30 +234,23 @@ function listMaps() {
           url.lastIndexOf("/") + 1, 
           url.lastIndexOf(".json")
         );
-        table += `
-          <tr>
-            <td>
-              <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('about-modal')).close()">${formatName(name)}</a>
-            </td>
-            <td>${date.toLocaleDateString()}</td>
-            <td>${formatBytes(size, 1)}</td>
-            <td>
-              <a class="btn-floating waves-effect waves-light grey darken-3" onclick="updateMap('${url}');">
-                <img class="fab-icon-small" src="assets/img/update-white-18dp.svg">
-              </a>
-              <!--<a class="btn-small waves-effect waves-light blue" onclick="updateMap('${url}');">Update</a>-->
-              <!--<a class="btn-floating waves-effect waves-light red" onclick="deleteMap();">
-                <img class="fab-icon-small" src="assets/img/delete-white-18dp.svg">
-              </a>-->
-            </td>
-          </tr>
-        `;
+        collection += `
+          <li class="collection-item">
+            <div class="row valign-wrapper" style="margin: 0px">
+              <div class="col s11">
+                <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('about-modal')).close()">${formatName(name)}</a><br>
+                ${date.toLocaleDateString()}, ${formatBytes(size, 1)}
+              </div>
+              <div class="col s1">
+                <img src="assets/img/refresh-black-18dp.svg" height="20px" width="20px" onclick="updateMap('${url}');">
+              </div>
+            </div>
+          </li>`;
       });
-      table += `</tbody></table>`;
-      return table;
-    }).then(table => {
-      // document.getElementById("map-list-container").innerHTML = table;
-      document.getElementById("maps").innerHTML = table;
+      collection += "</ul>";
+      return collection;
+    }).then(collection => {
+      document.getElementById("map-list-container").innerHTML = collection;
     });
   });
 }
