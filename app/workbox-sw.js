@@ -6,9 +6,9 @@ workbox.setConfig({
 });
 
 workbox.precaching.precacheAndRoute([
-  {url: 'index.html', revision: '05.98.2020.1'},
-  {url: './', revision: '05.98.2020.1'},
-  {url: 'manifest.json', revision: '04.23.2020.1'},
+  {url: 'index.html', revision: '05.08.2020.2'},
+  {url: './', revision: '05.08.2020.2'},
+  {url: 'manifest.json', revision: '05.98.2020.1'},
   {url: 'assets/img/apple-touch-icon.png', revision: '04.23.2020.1'},
   {url: 'assets/img/favicon-32x32.png', revision: '04.23.2020.1'},
   {url: 'assets/img/favicon-16x16.png', revision: '04.23.2020.1'},
@@ -36,8 +36,8 @@ workbox.precaching.precacheAndRoute([
   {url: 'assets/vendor/Leaflet.TileLayer.Base64/Leaflet.TileLayer.Base64.js', revision: '04.23.2020.1'},
   {url: 'assets/vendor/materialize-1.0.0/css/materialize.min.css', revision: '04.23.2020.1'},
   {url: 'assets/vendor/materialize-1.0.0/js/materialize.min.js', revision: '04.23.2020.1'},
-  {url: 'assets/css/app.css', revision: '05.98.2020.1'},
-  {url: 'assets/js/app.js', revision: '05.98.2020.1'}
+  {url: 'assets/css/app.css', revision: '05.08.2020.1'},
+  {url: 'assets/js/app.js', revision: '05.08.2020.1'}
 ]);
 
 workbox.routing.registerRoute(
