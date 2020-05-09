@@ -58,8 +58,6 @@ const controls = {
   }).addTo(map)
 };
 
-let tabs = null;
-
 window.addEventListener("hashchange", loadURLparams);
 
 map.once("locationfound", function(e) {
@@ -85,6 +83,10 @@ document.addEventListener("DOMContentLoaded", function() {
     direction: "left",
     hoverEnabled: false
   });
+  map.on("click", function(e) {
+    instances[0].close();
+    document.querySelector(".leaflet-control-scale").classList.remove("scale-out");
+  });
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -106,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
 document.getElementById("fab-btn").addEventListener("click", function() {
   const scale = document.querySelector(".leaflet-control-scale");
   if (this.classList.contains("active")) {
-    scale.classList.remove("scale-out")
+    scale.classList.remove("scale-out");
   } else {
     scale.classList.add("scale-out");
   }
@@ -155,6 +157,17 @@ function shareLink() {
   }
 }
 
+function copyCoordinates() {
+  const copyElement = L.DomUtil.create("textarea", "hidden");
+  const coordsElement = document.getElementById("coordinates");
+  copyElement.value = coordsElement.innerHTML;
+  coordsElement.appendChild(copyElement);
+  copyElement.select();
+  document.execCommand("copy");
+  coordsElement.removeChild(copyElement);
+  M.toast({html: "Coordinates copied to clipboard!", displayLength: 2000});
+}
+
 function loadURLparams() {
   if (window.location.hash) {
     const id = window.location.hash.replace("#", "");
@@ -164,21 +177,24 @@ function loadURLparams() {
   }
 }
 
-function checkCache(url) {
-  caches.open("cached-maps").then(cache => {
-    cache.match(url).then(function(match) {
-      if (match) {
-        loadMap(url);
-      } else {
-        cache.add(url).then(function() { 
-          loadMap(url);
-        });
-      }
-    });
-  });
-}
+// function checkCache(url) {
+//   caches.open("cached-maps").then(cache => {
+//     cache.match(url).then(function(match) {
+//       if (match) {
+//         loadMap(url);
+//       } else {
+//         cache.add(url).then(function() { 
+//           loadMap(url);
+//         });
+//       }
+//     });
+//   });
+// }
 
 function loadMap(url) {
+  if (layers.overlay) {
+    layers.overlay.removeFrom(map);
+  }
   layers.overlay = L.tileLayer.base64(url, {
     tms: true,
     updateWhenIdle: false
@@ -235,18 +251,23 @@ function listMaps() {
           url.lastIndexOf(".json")
         );
         collection += `
-          <li class="collection-item">
+          <li class="collection-item" oncontextmenu="deleteMap('${url}', '${formatName(name)}'); return false;" style="user-select: none;">
             <div class="row valign-wrapper" style="margin: 0px">
-              <div class="col s11">
+              <div class="col s8">
                 <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('about-modal')).close()">${formatName(name)}</a><br>
                 ${date.toLocaleDateString()}, ${formatBytes(size, 1)}
               </div>
-              <div class="col s1">
-                <img src="assets/img/refresh-black-18dp.svg" height="20px" width="20px" onclick="updateMap('${url}');">
+              <div class="col s4 right-align">
+                <!--<img src="assets/img/refresh-black-18dp.svg" onclick="updateMap('${url}');">-->
+                <!--<a class="btn-floating waves-effect waves-light grey lighten-5" onclick="updateMap('${url}');">
+                  <img class="fab-icon-small" src="assets/img/refresh-black-18dp.svg">
+                </a>-->
+                <a class="btn-small waves-effect waves-light blue" onclick="updateMap('${url}', '${formatName(name)}');">Update</a>
               </div>
             </div>
           </li>`;
       });
+      // collection += `<li class="collection-item center-align"><a class="btn-small waves-effect waves-light red" onclick="removeAllMaps();">Remove All Maps</a></li>`;
       collection += "</ul>";
       return collection;
     }).then(collection => {
@@ -255,12 +276,12 @@ function listMaps() {
   });
 }
 
-function updateMap(url) {
+function updateMap(url, name) {
   if (navigator.onLine) {
     caches.open("cached-maps").then(cache => {
       cache.match(url).then(response => {
         if (response) {
-          const cfm = confirm("Update this map?");
+          const cfm = confirm(`Update ${name}?`);
           if (cfm) {
             cache.delete(url).then(function(response) {
               cache.add(url).then(function() {
@@ -276,4 +297,22 @@ function updateMap(url) {
   } else {
     M.toast({html: "Cannot update map while offline!"});
   }
+}
+
+function deleteMap(url, name) {
+  caches.open("cached-maps").then(cache => {
+    cache.match(url).then(response => {
+      if (response) {
+        const cfm = confirm(`Delete ${name}?`);
+        if (cfm) {
+          cache.delete(url).then(function(response) {
+            if (layers.overlay) {
+              layers.overlay.removeFrom(map);
+            }
+            listMaps();
+          });
+        }
+      }
+    })
+  })
 }

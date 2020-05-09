@@ -36,8 +36,14 @@ html, body, #map {
   margin-left: 10px;
   pointer-events: none;
 }
+.collapsible-body {
+  padding: 1.25rem;
+}
 .header-icon {
   margin-right: 10px;
+}
+.collection .collection-item {
+  padding: 5px 5px;
 }
 .leaflet-control-locate {
   display: none;

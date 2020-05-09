@@ -10,7 +10,7 @@
     <meta name="description" content="An offline capable map viewer with GPS integration">
     <meta name="author" content="Bryan McBride">
     <title id="title">GPS Map</title>
-    <!-- <link rel="manifest" href="manifest.json"> -->
+    <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
@@ -21,6 +21,7 @@
   </head>
   <body>
     <main id="map"></main>
+    
     <a id="gps-btn" class="btn-floating btn-large waves-effect waves-light grey lighten-5" onclick="zoomToLocation();">
       <img id="gps-icon" class="fab-icon" src="assets/img/gps_not_fixed-black-18dp.svg">
     </a>
@@ -52,7 +53,16 @@
         <ul class="collapsible" style="margin: 0px; box-shadow: unset;">
           <li class="active">
             <div class="collapsible-header"><img class="header-icon" src="assets/img/gps_fixed-black-18dp.svg">Current Location</div>
-            <div class="collapsible-body" id="coordinates">Unknown...</div>
+            <div class="collapsible-body">
+              <div class="row valign-wrapper" style="margin: 0px">
+                <div id="coordinates" class="col s8">
+                  Unknown...
+                </div>
+                <div class="col s4 right-align">
+                  <a class="btn-small waves-effect waves-light blue" onclick="copyCoordinates();">Copy</a>
+                </div>
+              </div>
+            </div>
           </li>
           <li>
             <div class="collapsible-header"><img class="header-icon" src="assets/img/map-black-18dp.svg">Maps</div>
@@ -60,7 +70,7 @@
           </li>
           <li>
             <div class="collapsible-header"><img class="header-icon" src="assets/img/info-black-18dp.svg">About</div>
-            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            <div class="collapsible-body">Lorem ipsum dolor sit amet.</div>
           </li>
           <li>
             <div class="collapsible-header"><img class="header-icon" src="assets/img/policy-black-18dp.svg">Terms</div>
