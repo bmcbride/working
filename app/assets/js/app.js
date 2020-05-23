@@ -78,31 +78,23 @@ map.on("load", function(e) {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  const elems = document.querySelectorAll(".fixed-action-btn");
-  const instances = M.FloatingActionButton.init(elems, {
+  const fabInstances = M.FloatingActionButton.init(document.querySelectorAll(".fixed-action-btn"), {
     direction: "left",
     hoverEnabled: false
   });
   map.on("click", function(e) {
-    instances[0].close();
+    fabInstances[0].close();
     document.querySelector(".leaflet-control-scale").classList.remove("scale-out");
   });
-});
+  
+  M.Modal.init(document.querySelectorAll(".modal"), {});
+  M.Collapsible.init(document.querySelectorAll(".collapsible"), {accordion: true});
 
-document.addEventListener("DOMContentLoaded", function() {
-  const elems = document.querySelectorAll(".modal");
-  const instances = M.Modal.init(elems, {
-    // onOpenEnd: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
-    //   if (modal.id == "about-modal" && !tabs) {
-    //     tabs = M.Tabs.init(document.querySelectorAll(".tabs"), {swipeable: true});
-    //   }
-    // }
-  });
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-  const elems = document.querySelectorAll(".collapsible");
-  const instances = M.Collapsible.init(elems, {accordion: true});
+  if (!window.location.hash) {
+    listMaps();
+    M.Modal.getInstance(document.getElementById("about-modal")).open();
+    M.Collapsible.getInstance(document.getElementById("about-collapsible")).open(1);
+  }
 });
 
 document.getElementById("fab-btn").addEventListener("click", function() {
@@ -204,6 +196,7 @@ function loadMap(url) {
     setTitle();
     listMaps();
   }).addTo(map);
+  M.Modal.getInstance(document.getElementById("about-modal")).close();
 }
 
 function formatBytes(bytes, decimals = 2) {
@@ -235,40 +228,44 @@ function setTitle() {
 }
 
 function listMaps() {
-  let collection = "<ul class='collection'>";
   caches.open("cached-maps").then(cache => {
     cache.matchAll().then(response => {
-      response.forEach(element => {
-        const date = new Date(element.headers.get("Date"));
-        const size = element.headers.get("Content-Length");
-        const url = element.url;
-        const id = url.substring(
-          url.lastIndexOf("maps/") + 5, 
-          url.lastIndexOf(".json")
-        );
-        const name = url.substring(
-          url.lastIndexOf("/") + 1, 
-          url.lastIndexOf(".json")
-        );
-        collection += `
-          <li class="collection-item" oncontextmenu="deleteMap('${url}', '${formatName(name)}'); return false;" style="user-select: none;">
-            <div class="row valign-wrapper" style="margin: 0px">
-              <div class="col s8">
-                <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('about-modal')).close()">${formatName(name)}</a><br>
-                ${date.toLocaleDateString()}, ${formatBytes(size, 1)}
+      if (response.length > 0) {
+        var collection = "<ul class='collection'>";
+        response.forEach(element => {
+          const date = new Date(element.headers.get("Date"));
+          const size = element.headers.get("Content-Length");
+          const url = element.url;
+          const id = url.substring(
+            url.lastIndexOf("maps/") + 5, 
+            url.lastIndexOf(".json")
+          );
+          const name = url.substring(
+            url.lastIndexOf("/") + 1, 
+            url.lastIndexOf(".json")
+          );
+          collection += `
+            <li class="collection-item" oncontextmenu="deleteMap('${url}', '${formatName(name)}'); return false;" style="user-select: none;">
+              <div class="row valign-wrapper" style="margin: 0px">
+                <div class="col s8">
+                  <a href="#${id}" onclick="M.Modal.getInstance(document.getElementById('about-modal')).close()">${formatName(name)}</a><br>
+                  ${date.toLocaleDateString()}, ${formatBytes(size, 1)}
+                </div>
+                <div class="col s4 right-align">
+                  <!--<img src="assets/img/refresh-black-18dp.svg" onclick="updateMap('${url}');">-->
+                  <!--<a class="btn-floating waves-effect waves-light grey lighten-5" onclick="updateMap('${url}');">
+                    <img class="fab-icon-small" src="assets/img/refresh-black-18dp.svg">
+                  </a>-->
+                  <a class="btn-small waves-effect waves-light blue" onclick="updateMap('${url}', '${formatName(name)}');">Update</a>
+                </div>
               </div>
-              <div class="col s4 right-align">
-                <!--<img src="assets/img/refresh-black-18dp.svg" onclick="updateMap('${url}');">-->
-                <!--<a class="btn-floating waves-effect waves-light grey lighten-5" onclick="updateMap('${url}');">
-                  <img class="fab-icon-small" src="assets/img/refresh-black-18dp.svg">
-                </a>-->
-                <a class="btn-small waves-effect waves-light blue" onclick="updateMap('${url}', '${formatName(name)}');">Update</a>
-              </div>
-            </div>
-          </li>`;
-      });
-      // collection += `<li class="collection-item center-align"><a class="btn-small waves-effect waves-light red" onclick="removeAllMaps();">Remove All Maps</a></li>`;
-      collection += "</ul>";
+            </li>`;
+        });
+        collection += "</ul>";
+      } else {
+        var collection = `<div style="padding: 1.2em;">No maps available. You may need to reload to see saved maps...</div>`;
+      }
+      
       return collection;
     }).then(collection => {
       document.getElementById("map-list-container").innerHTML = collection;
