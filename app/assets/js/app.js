@@ -109,16 +109,19 @@ document.getElementById("fab-btn").addEventListener("click", function() {
 map.fitWorld();
 
 function zoomToLayer() {
-  map.fitBounds(layers.overlay._bounds);
+  // map.fitBounds(layers.overlay._bounds);
+  map.fitBounds(layers.overlay.options.bounds);
 }
 
 function setMapBounds() {
-  map.setMaxBounds(layers.overlay._bounds);
+  // map.setMaxBounds(layers.overlay._bounds);
+  map.setMaxBounds(layers.overlay.options.bounds);
 }
 
 function zoomToLocation() {
   const loc = controls.locateCtrl._circle ? controls.locateCtrl._circle.getLatLng() : null;
-  const bounds = layers.overlay._bounds;
+  // const bounds = layers.overlay._bounds;
+  const bounds = L.latLngBounds(layers.overlay.options.bounds);
   if (loc && bounds.contains(loc)) {
     map.setView(loc); 
   } else {
@@ -163,7 +166,8 @@ function copyCoordinates() {
 function loadURLparams() {
   if (window.location.hash) {
     const id = window.location.hash.replace("#", "");
-    const url = window.location.origin + window.location.pathname + "maps/" + id + ".json";
+    // const url = window.location.origin + window.location.pathname + "maps/" + id + ".json";
+    const url = window.location.origin + window.location.pathname + "maps/" + id + ".mbtiles";
     // checkCache(url);
     loadMap(url);
   }
@@ -187,16 +191,26 @@ function loadMap(url) {
   if (layers.overlay) {
     layers.overlay.removeFrom(map);
   }
-  layers.overlay = L.tileLayer.base64(url, {
-    tms: true,
+  // layers.overlay = L.tileLayer.base64(url, {
+  //   tms: true,
+  //   updateWhenIdle: false
+  // }).once("loaded", function(e) {
+  //   zoomToLayer();
+  //   setMapBounds();
+  //   setTitle();
+  //   listMaps();
+  // }).addTo(map);
+
+  layers.overlay = L.tileLayer.mbTiles(url, {
+    autoScale: true,
+    fitBounds: true,
     updateWhenIdle: false
-  }).once("loaded", function(e) {
-    zoomToLayer();
+  }).on("databaseloaded", function(e) {
     setMapBounds();
     setTitle();
     listMaps();
   }).addTo(map);
-  M.Modal.getInstance(document.getElementById("about-modal")).close();
+  // M.Modal.getInstance(document.getElementById("about-modal")).close();
 }
 
 function formatBytes(bytes, decimals = 2) {
@@ -238,11 +252,13 @@ function listMaps() {
           const url = element.url;
           const id = url.substring(
             url.lastIndexOf("maps/") + 5, 
-            url.lastIndexOf(".json")
+            // url.lastIndexOf(".json")
+            url.lastIndexOf(".mbtiles")
           );
           const name = url.substring(
             url.lastIndexOf("/") + 1, 
-            url.lastIndexOf(".json")
+            // url.lastIndexOf(".json")
+            url.lastIndexOf(".mbtiles")
           );
           collection += `
             <li class="collection-item" oncontextmenu="deleteMap('${url}', '${formatName(name)}'); return false;" style="user-select: none;">
@@ -252,10 +268,6 @@ function listMaps() {
                   ${date.toLocaleDateString()}, ${formatBytes(size, 1)}
                 </div>
                 <div class="col s4 right-align">
-                  <!--<img src="assets/img/refresh-black-18dp.svg" onclick="updateMap('${url}');">-->
-                  <!--<a class="btn-floating waves-effect waves-light grey lighten-5" onclick="updateMap('${url}');">
-                    <img class="fab-icon-small" src="assets/img/refresh-black-18dp.svg">
-                  </a>-->
                   <a class="btn-small waves-effect waves-light blue" onclick="updateMap('${url}', '${formatName(name)}');">Update</a>
                 </div>
               </div>
@@ -313,3 +325,11 @@ function deleteMap(url, name) {
     })
   })
 }
+
+initSqlJs({
+  locateFile: function() {
+    return "assets/vendor/sqljs-1.3.0/sql-wasm.wasm";
+  }
+}).then(function(SQL){
+  
+});
