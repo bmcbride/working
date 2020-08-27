@@ -20,6 +20,7 @@ workbox.precaching.precacheAndRoute([
   {url: 'assets/img/help-white-18dp.svg', revision: '04.23.2020.1'},
   {url: 'assets/img/share-white-18dp.svg', revision: '04.23.2020.1'},
   {url: 'assets/img/zoom_out_map-white-18dp.svg', revision: '04.23.2020.1'},
+  {url: 'assets/img/add-white-18dp.svg', revision: '08.27.2020.1'},
   {url: 'assets/img/map-black-18dp.svg', revision: '04.28.2020.1'},
   {url: 'assets/img/refresh-black-18dp.svg', revision: '04.29.2020.1'},
   {url: 'assets/img/info-black-18dp.svg', revision: '04.28.2020.1'},
