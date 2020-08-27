@@ -6,8 +6,8 @@ workbox.setConfig({
 });
 
 workbox.precaching.precacheAndRoute([
-  {url: 'index.html', revision: '08.26.2020.1'},
-  {url: './', revision: '08.26.2020.1'},
+  {url: 'index.html', revision: '08.26.2020.2'},
+  {url: './', revision: '08.26.2020.2'},
   {url: 'manifest.json', revision: '05.98.2020.1'},
   {url: 'assets/img/apple-touch-icon.png', revision: '04.23.2020.1'},
   {url: 'assets/img/favicon-32x32.png', revision: '04.23.2020.1'},
@@ -40,7 +40,7 @@ workbox.precaching.precacheAndRoute([
   {url: 'assets/vendor/sqljs-1.3.0/sql-wasm.js', revision: '08.26.2020.1'},
   {url: 'assets/vendor/sqljs-1.3.0/sql-wasm.wasm', revision: '08.26.2020.1'},
   {url: 'assets/css/app.css', revision: '05.23.2020.1'},
-  {url: 'assets/js/app.js', revision: '06.26.2020.1'}
+  {url: 'assets/js/app.js', revision: '06.26.2020.2'}
 ]);
 
 workbox.routing.registerRoute(

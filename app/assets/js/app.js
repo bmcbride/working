@@ -58,6 +58,18 @@ const controls = {
   }).addTo(map)
 };
 
+const fileInput = L.DomUtil.create("input", "hidden");
+fileInput.type = "file";
+fileInput.accept = ".mbtiles";
+fileInput.style.display = "none";
+
+fileInput.addEventListener("change", function () {
+  const file = fileInput.files[0];
+  const name = file.name.split(".").slice(0, -1).join(".");
+  addFile(file, name);
+  this.value = "";
+}, false);
+
 window.addEventListener("hashchange", loadURLparams);
 
 map.once("locationfound", function(e) {
@@ -187,7 +199,7 @@ function loadURLparams() {
 //   });
 // }
 
-function loadMap(url) {
+function loadMap(url, name) {
   if (layers.overlay) {
     layers.overlay.removeFrom(map);
   }
@@ -207,7 +219,7 @@ function loadMap(url) {
     updateWhenIdle: false
   }).on("databaseloaded", function(e) {
     setMapBounds();
-    setTitle();
+    setTitle(name);
     listMaps();
   }).addTo(map);
   // M.Modal.getInstance(document.getElementById("about-modal")).close();
@@ -230,8 +242,8 @@ function formatName(str) {
   return str.join(" ");
 }
 
-function setTitle() {
-  let name = window.location.hash.replace("#", "");
+function setTitle(fileName) {
+  let name = fileName ? fileName : window.location.hash.replace("#", "");
   if (name.includes("/")) {
     name = name.substring(
       name.lastIndexOf("/") + 1, 
@@ -324,6 +336,18 @@ function deleteMap(url, name) {
       }
     })
   })
+}
+
+function addFile(file, name) {
+  if (file.name.endsWith(".mbtiles")) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      loadMap(reader.result, name);
+    }
+    reader.readAsArrayBuffer(file);
+  } else {
+    alert("MBTiles files supported.");
+  }
 }
 
 initSqlJs({
