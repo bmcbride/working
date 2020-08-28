@@ -1,0 +1,30 @@
+<a id="view" href="" target="_blank">View PDF</a>
+
+<!-- download from https://raw.githubusercontent.com/phihag/pdfform.js/dist/dist/pdfform.minipdf.dist.js -->
+<script src="FileSaver.min.js"></script>
+<script src="pdfform.minipdf.dist"></script>
+<script>
+
+const values = {
+  "Text131": ['Bryan'],
+  "Text132": ['McBride']
+};
+
+function getSourcePDF() {
+
+  fetch("source.pdf")
+    .then(res => res.arrayBuffer())
+    .then(pdfArrayBuffer => {
+      console.log(pdfform().list_fields(pdfArrayBuffer));
+      
+      let filledPDF = pdfform().transform(pdfArrayBuffer, values);
+      const blob = new Blob([filledPDF], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      document.getElementById("view").href = url;
+      // window.location = url;
+      // saveAs(blob, 'file.pdf')
+    });
+}
+
+getSourcePDF();
+</script>
