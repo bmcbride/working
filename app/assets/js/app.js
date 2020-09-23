@@ -40,7 +40,8 @@ const controls = {
     metric: false,
     strings: {
       popup: function(options) {
-        return `You are within ${options.distance} ${options.unit} from ${controls.locateCtrl._circle.getLatLng().lat.toFixed(6)},${controls.locateCtrl._circle.getLatLng().lng.toFixed(6)}`;
+        const loc = controls.locateCtrl._marker.getLatLng();
+        return `<div style="text-align: center;">You are within ${Number(options.distance).toLocaleString()} ${options.unit}<br>from <strong>${loc.lat.toFixed(6)}</strong>, <strong>${loc.lng.toFixed(6)}</strong></div>`;
       }
     },
     locateOptions: {
@@ -58,17 +59,17 @@ const controls = {
   }).addTo(map)
 };
 
-const fileInput = L.DomUtil.create("input", "hidden");
-fileInput.type = "file";
-fileInput.accept = ".mbtiles";
-fileInput.style.display = "none";
+// const fileInput = L.DomUtil.create("input", "hidden");
+// fileInput.type = "file";
+// fileInput.accept = ".mbtiles";
+// fileInput.style.display = "none";
 
-fileInput.addEventListener("change", function () {
-  const file = fileInput.files[0];
-  const name = file.name.split(".").slice(0, -1).join(".");
-  addFile(file, name);
-  this.value = "";
-}, false);
+// fileInput.addEventListener("change", function () {
+//   const file = fileInput.files[0];
+//   const name = file.name.split(".").slice(0, -1).join(".");
+//   addFile(file, name);
+//   this.value = "";
+// }, false);
 
 window.addEventListener("hashchange", loadURLparams);
 
@@ -121,19 +122,19 @@ document.getElementById("fab-btn").addEventListener("click", function() {
 map.fitWorld();
 
 function zoomToLayer() {
-  // map.fitBounds(layers.overlay._bounds);
-  map.fitBounds(layers.overlay.options.bounds);
+  map.fitBounds(layers.overlay._bounds);
+  // map.fitBounds(layers.overlay.options.bounds);
 }
 
 function setMapBounds() {
-  // map.setMaxBounds(layers.overlay._bounds);
-  map.setMaxBounds(layers.overlay.options.bounds);
+  map.setMaxBounds(layers.overlay._bounds);
+  // map.setMaxBounds(layers.overlay.options.bounds);
 }
 
 function zoomToLocation() {
   const loc = controls.locateCtrl._circle ? controls.locateCtrl._circle.getLatLng() : null;
-  // const bounds = layers.overlay._bounds;
-  const bounds = L.latLngBounds(layers.overlay.options.bounds);
+  const bounds = layers.overlay._bounds;
+  // const bounds = L.latLngBounds(layers.overlay.options.bounds);
   if (loc && bounds.contains(loc)) {
     map.setView(loc); 
   } else {
@@ -178,8 +179,8 @@ function copyCoordinates() {
 function loadURLparams() {
   if (window.location.hash) {
     const id = window.location.hash.replace("#", "");
-    // const url = window.location.origin + window.location.pathname + "maps/" + id + ".json";
-    const url = window.location.origin + window.location.pathname + "maps/" + id + ".mbtiles";
+    const url = window.location.origin + window.location.pathname + "maps/" + id + ".json";
+    // const url = window.location.origin + window.location.pathname + "maps/" + id + ".mbtiles";
     // checkCache(url);
     loadMap(url);
   }
@@ -203,25 +204,27 @@ function loadMap(url, name) {
   if (layers.overlay) {
     layers.overlay.removeFrom(map);
   }
-  // layers.overlay = L.tileLayer.base64(url, {
-  //   tms: true,
-  //   updateWhenIdle: false
-  // }).once("loaded", function(e) {
-  //   zoomToLayer();
+  layers.overlay = L.tileLayer.base64(url, {
+    tms: true,
+    updateWhenIdle: false
+  }).once("loaded", function(e) {
+    zoomToLayer();
+    setMapBounds();
+    setTitle();
+    listMaps();
+  }).addTo(map);
+
+  // layers.overlay = L.tileLayer.mbTiles(url, {
+  //   autoScale: true,
+  //   fitBounds: true,
+  //   updateWhenIdle: false,
+  //   attribution: ""
+  // }).on("databaseloaded", function(e) {
   //   setMapBounds();
-  //   setTitle();
+  //   setTitle(name);
   //   listMaps();
   // }).addTo(map);
 
-  layers.overlay = L.tileLayer.mbTiles(url, {
-    autoScale: true,
-    fitBounds: true,
-    updateWhenIdle: false
-  }).on("databaseloaded", function(e) {
-    setMapBounds();
-    setTitle(name);
-    listMaps();
-  }).addTo(map);
   // M.Modal.getInstance(document.getElementById("about-modal")).close();
 }
 
@@ -264,13 +267,13 @@ function listMaps() {
           const url = element.url;
           const id = url.substring(
             url.lastIndexOf("maps/") + 5, 
-            // url.lastIndexOf(".json")
-            url.lastIndexOf(".mbtiles")
+            url.lastIndexOf(".json")
+            // url.lastIndexOf(".mbtiles")
           );
           const name = url.substring(
             url.lastIndexOf("/") + 1, 
-            // url.lastIndexOf(".json")
-            url.lastIndexOf(".mbtiles")
+            url.lastIndexOf(".json")
+            // url.lastIndexOf(".mbtiles")
           );
           collection += `
             <li class="collection-item" oncontextmenu="deleteMap('${url}', '${formatName(name)}'); return false;" style="user-select: none;">
@@ -290,9 +293,13 @@ function listMaps() {
         var collection = `<div style="padding: 1.2em;">No maps available. You may need to reload to see saved maps...</div>`;
       }
       
-      return collection;
-    }).then(collection => {
-      document.getElementById("map-list-container").innerHTML = collection;
+      return {
+        list: collection,
+        count: response.length
+      };
+    }).then(maps => {
+      document.getElementById("map-list-container").innerHTML = maps.list;
+      return maps.count;
     });
   });
 }
@@ -338,22 +345,22 @@ function deleteMap(url, name) {
   })
 }
 
-function addFile(file, name) {
-  if (file.name.endsWith(".mbtiles")) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      loadMap(reader.result, name);
-    }
-    reader.readAsArrayBuffer(file);
-  } else {
-    alert("MBTiles files supported.");
-  }
-}
+// function addFile(file, name) {
+//   if (file.name.endsWith(".mbtiles")) {
+//     const reader = new FileReader();
+//     reader.onload = function(e) {
+//       loadMap(reader.result, name);
+//     }
+//     reader.readAsArrayBuffer(file);
+//   } else {
+//     alert("MBTiles files supported.");
+//   }
+// }
 
-initSqlJs({
-  locateFile: function() {
-    return "assets/vendor/sqljs-1.3.0/sql-wasm.wasm";
-  }
-}).then(function(SQL){
+// initSqlJs({
+//   locateFile: function() {
+//     return "assets/vendor/sqljs-1.3.0/sql-wasm.wasm";
+//   }
+// }).then(function(SQL){
   
-});
+// });
